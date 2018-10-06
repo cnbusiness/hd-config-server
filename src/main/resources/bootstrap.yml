@@ -1,0 +1,60 @@
+server:
+  port: 8100
+
+spring:
+  profiles:
+    active: native
+  application:
+    name: hd-config-server
+  rabbitmq:
+    host: 119.23.109.242
+    port: 5672
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: file:/data/hlb-cloud/conf
+          #search-locations: classpath:/
+          #search-locations: classpath:/aliyun/
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+             defaultZone: http://eureka.didispace.com/eureka/ 
+             
+encrypt:
+  key: hlbb          
+                    
+---
+spring:
+  profiles: docker
+  application:
+    name: hd-config-server
+  rabbitmq:
+    host: rabbitmq-server
+    port: 5672
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: file:/app/config
+
+server:
+  port: 8100
+
+eureka:
+  instance:
+    hostname: hd-config-server
+    prefer-ip-address: false
+    instance-id: ${spring.application.name}:${server.port}:${random.value}
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+            defaultZone: http://eureka-server:8761/eureka/
+encrypt:
+  key: hlbb             
